@@ -1,9 +1,38 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
 import HelloWorld from './components/HelloWorld.vue';
+
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
 </script>
 
 <template>
+    <div class="main-container full-height full-width">
+        <Header />
+        <RouterView />
+        <Footer />
+    </div>
+</template>
+
+<style scoped>
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid green;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.full-width {
+    width: 100vw;
+}
+</style>
+
+<!-- <template>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
@@ -20,9 +49,9 @@ import HelloWorld from './components/HelloWorld.vue';
   </header>
 
   <RouterView />
-</template>
+</template> -->
 
-<style scoped>
+<!-- <style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -84,4 +113,4 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
-</style>
+</style> -->
