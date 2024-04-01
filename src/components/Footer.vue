@@ -3,10 +3,7 @@
 
 <template>
     <div class="main-footer">
-        <p>Footer item 1</p>
-        <p>Footer item 2</p>
-        <p>Footer item 3</p>
-        <p>Footer item 4</p>
+        <p>Copyright Alberto Salas {{ new Date().getFullYear() }}</p>
     </div>
 </template>
 
@@ -14,6 +11,10 @@
 .main-footer {
     display: flex;
     flex-direction: row;
-    border: 2px solid green;
+    justify-content: center;
+    padding: 1rem;
+    /* border: 2px solid green; */
+    background-color: bisque;
+    width: 100vw;
 }
 </style>

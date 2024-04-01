@@ -20,15 +20,25 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/users/:id',
-      name: 'userDetails',
+      path: '/hotels',
+      name: 'hotels',
+      component: () => import('../views/HotelsView.vue')
+    },
+    {
+      path: '/user',
+      name: 'user',
       component: () => import('../views/UserDetailsView.vue')
       // component: UserDetailsView,
     },
     {
-      path: '/counter',
-      name: 'counter',
-      component: () => import('../views/CounterView.vue')
+      path: '/bookings/:idHotel',
+      name: 'bookings',
+      component: () => import('../views/BookingsView.vue')
+    },
+    {
+      path: '/bookings',
+      name: 'bookings',
+      component: () => import('../views/BookingsView.vue')
     },
     {
       path: '/dashboard',

@@ -3,10 +3,13 @@
 
 <template>
     <nav class="header-container">
-        <RouterLink to="/">Item1</RouterLink>
-        <RouterLink to="/about">Item2</RouterLink>
-        <RouterLink to="/about">Item3</RouterLink>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/hotels">Hotels</RouterLink>
+        <RouterLink to="/bookings">Bookings</RouterLink>
+        <RouterLink to="/newbooking">New Booking</RouterLink>
         <RouterLink to="/dashboard">Dashboard</RouterLink>
+        <RouterLink to="/user">User</RouterLink>
+        <RouterLink to="/logout">Log out</RouterLink>
     </nav>
 </template>
 
@@ -14,7 +17,9 @@
 .header-container {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     border: 2px solid green;
+    gap: 2rem;
     /* width: 100vw; */
 }
 

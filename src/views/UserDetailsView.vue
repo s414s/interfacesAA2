@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { reactive, ref } from 'vue/dist/vue.js';
 
 // coger info de url
 const route = useRoute();
@@ -12,13 +12,14 @@ interface User {
 }
 
 const userId = ref('userId');
+
 const mockUser = reactive<User>({
     id: 1,
     name: "nombre",
     surname: "apellido",
 });
 
-// ... fetch
+// ... fetch from url
 mockUser.id = +route.params.id;
 
 // TODO
@@ -34,7 +35,7 @@ mockUser.id = +route.params.id;
 
 <template>
     <main>
-        <p>Hola desde UserDetailsView</p>
+        <p>Hola desde user</p>
         <p>Datos del estado {{ userId }}</p>
         <p>Datos del usuario {{ mockUser }}</p>
     </main>

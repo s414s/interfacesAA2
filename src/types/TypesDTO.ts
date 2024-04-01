@@ -18,6 +18,7 @@ export interface Hotel {
     name: string;
     city: string;
     numberOfRooms: number;
+    rooms: Room[];
 }
 
 export interface Login {
