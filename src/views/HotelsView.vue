@@ -1,41 +1,42 @@
 <script setup lang="ts">
+import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
-
-const items = [
-    {
-        name: 'African Elephant',
-        species: 'Loxodonta africana',
-        diet: 'Herbivore',
-        habitat: 'Savanna, Forests',
-    },
-    {
-        name: 'European Elephant',
-        species: 'Loxodonta africana',
-        diet: 'Herbivore',
-        habitat: 'Savanna, Forests',
-    },
-    {
-        name: 'American Elephant',
-        species: 'Loxodonta africana',
-        diet: 'Herbivore',
-        habitat: 'Savanna, Forests',
-    },
-];
+import type { Hotel } from '@/types/TypesDTO';
+import { reactive } from 'vue';
 
 type ReadonlyHeaders = VDataTable['$props']['headers'];
 
 const headers: ReadonlyHeaders = [
-    { title: 'Animal Name', align: 'center', key: 'name' },
-    { title: 'Breed', align: 'center', key: 'species' },
-    { title: 'Diet', align: 'center', key: 'diet' },
-    { title: 'Location', align: 'center', key: 'habitat' },
-]
+    { title: 'Hotel Name', align: 'center', key: 'name' },
+    { title: 'Address', align: 'center', key: 'address' },
+    { title: 'City', align: 'center', key: 'city' },
+    { title: 'Number of rooms', align: 'center', key: 'numberOfRooms' },
+];
+
+const { user, isAuthed, jwt } = useUserStore();
+
+const hotels: Hotel[] = reactive([]);
+
+const baseUrl = "http://localhost:5093/";
+
+const requestOptions = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    },
+};
+
+fetch(baseUrl + "hotels", requestOptions)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        hotels.push(...data);
+    });
 
 </script>
 
 <template>
     <h2>Hotels</h2>
-
-    <v-data-table :headers="headers" :items="items" density="compact" :sort-by="[{ key: 'name', order: 'desc' }]" />
-    <!-- <v-data-table-virtual :headers="headers" :items="items" height="400" item-value="name"></v-data-table-virtual> -->
+    <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'name', order: 'desc' }]" />
 </template>
