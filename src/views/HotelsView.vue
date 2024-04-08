@@ -30,7 +30,6 @@ const requestOptions = {
 fetch(baseUrl + "hotels", requestOptions)
     .then(res => res.json())
     .then(data => {
-        console.log(data);
         hotels.push(...data);
     });
 
@@ -38,5 +37,5 @@ fetch(baseUrl + "hotels", requestOptions)
 
 <template>
     <h2>Hotels</h2>
-    <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'name', order: 'desc' }]" />
+    <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'desc' }]" />
 </template>

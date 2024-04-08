@@ -1,26 +1,34 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
+import type { User } from '@/types/TypesDTO';
 
 // coger info de url
-const route = useRoute();
-
-interface User {
-    id: number,
-    name: string,
-    surname: string,
-}
-
-const userId = ref('userId');
-
-const mockUser = reactive<User>({
-    id: 1,
-    name: "nombre",
-    surname: "apellido",
-});
-
+// const route = useRoute();
 // ... fetch from url
-mockUser.id = +route.params.id;
+// mockUser.id = +route.params.id;
+
+const { jwt } = useUserStore();
+
+const user = ref<User | undefined>(undefined);
+
+const baseUrl = "http://localhost:5093/";
+const requestOptions = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    },
+};
+
+fetch(baseUrl + "auth/me", requestOptions)
+    .then(res => res.json())
+    .then(data => {
+        console.log("response", data);
+    });
+
+console.log(user);
 
 // TODO
 // Mirar los navigation-guards
@@ -35,8 +43,9 @@ mockUser.id = +route.params.id;
 
 <template>
     <main>
-        <p>Hola desde user</p>
-        <p>Datos del estado {{ userId }}</p>
-        <p>Datos del usuario {{ mockUser }}</p>
+        <p>User data:</p>
+        <p>Name: {{ user?.name ?? "user name" }}</p>
+        <p>Surname: {{ user?.surname ?? "user surname" }}</p>
+        <p>Is Admin: {{ user?.isAdmin ?? false }}</p>
     </main>
 </template>
