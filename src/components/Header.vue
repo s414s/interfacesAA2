@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
-const { isAuthed } = useUserStore();
-
+const { isAuthed, logout } = useUserStore();
 </script>
 
 <template>
@@ -9,11 +8,12 @@ const { isAuthed } = useUserStore();
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/hotels">Hotels</RouterLink>
         <RouterLink to="/bookings">Bookings</RouterLink>
-        <RouterLink v-show="isAuthed" to="/newbooking">New Booking</RouterLink>
+        <RouterLink to="/newbooking">New Booking</RouterLink>
         <RouterLink to="/dashboard">Dashboard</RouterLink>
         <RouterLink to="/user">User</RouterLink>
-        <RouterLink v-if="!isAuthed" to="/login">Log in</RouterLink>
-        <RouterLink v-else to="/logout">Log out</RouterLink>
+        <!-- <RouterLink v-show="!isAuthed" to="/login">Log in</RouterLink> -->
+        <!-- <RouterLink v-show="isAuthed" to="/logout">Log out</RouterLink> -->
+        <a href="#" v-if="isAuthed" @click="logout">Log out</a>
     </nav>
 </template>
 

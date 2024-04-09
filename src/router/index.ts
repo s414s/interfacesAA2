@@ -3,12 +3,16 @@ import HomeView from '../views/HomeView.vue';
 import { useUserStore } from '@/stores/userStore';
 // import UserDetailsView from '../views/UserDetailsView.vue';
 
+// TODO - leer
+// https://router.vuejs.org/guide/advanced/meta.html
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
+      meta: { requiresAuth: true },
       component: HomeView
     },
     {
@@ -17,12 +21,13 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
+      meta: { requiresAuth: true },
       component: () => import('../views/AboutView.vue')
     },
     {
       path: '/hotels',
       name: 'hotels',
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
       component: () => import('../views/HotelsView.vue')
     },
     {
@@ -60,11 +65,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  // ✅ This will work because the router starts its navigation after
-  // the router is installed and pinia will be installed too
+  // the router starts its navigation after the router is installed and pinia will be installed too
   const { isAuthed } = useUserStore();
 
   if (to.meta.requiresAuth && !isAuthed) return '/login';
+
+  if (to.name === 'login' && isAuthed) return '/';
 });
 
 export default router;

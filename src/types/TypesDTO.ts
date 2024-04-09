@@ -2,7 +2,11 @@ export interface User {
     id: number,
     name: string,
     surname: string,
-    isAdmin: boolean,
+    role: string,
+}
+
+export interface Login {
+    token: string;
 }
 
 export interface Booking {
