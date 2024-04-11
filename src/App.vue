@@ -7,11 +7,6 @@ import Footer from './components/Footer.vue';
 </script>
 
 <template>
-    <!-- TODO: if (!user.IsAuthenticated) -->
-    <!-- <div>
-        Sign In
-    </div> -->
-
     <div class="main-container full-height full-width">
         <Header />
         <RouterView />

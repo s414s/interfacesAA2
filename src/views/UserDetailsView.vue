@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
 import { reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
 
 // coger info de url
 // const route = useRoute();
-// ... fetch from url
 // mockUser.id = +route.params.id;
 
 const { user, fetchUser } = useUserStore();

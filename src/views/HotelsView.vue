@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
 import type { Hotel } from '@/types/TypesDTO';
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 type ReadonlyHeaders = VDataTable['$props']['headers'];
 
@@ -14,6 +15,7 @@ const headers: ReadonlyHeaders = [
 ];
 
 const { user, isAuthed, jwt } = useUserStore();
+const router = useRouter();
 
 const hotels: Hotel[] = reactive([]);
 
@@ -37,5 +39,18 @@ fetch(baseUrl + "hotels", requestOptions)
 
 <template>
     <h2>Hotels</h2>
-    <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'desc' }]" />
+
+    <v-container>
+        <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'desc' }]">
+            <template v-slot:item="{ item }">
+                <tr @click="router.push({ name: 'hotels', params: { idHotel: item.id } })" style="cursor: pointer">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>{{ item.city }}</td>
+                    <td>{{ item.numberOfRooms }}</td>
+                </tr>
+            </template>
+        </v-data-table>
+    </v-container>
+
 </template>

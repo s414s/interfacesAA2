@@ -28,9 +28,6 @@ export const useUserStore = defineStore('user', () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log("calling fetchUser");
-                console.log(data);
-
                 user.id = data.id;
                 user.name = data.name;
                 user.surname = data.surname;

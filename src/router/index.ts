@@ -27,8 +27,15 @@ const router = createRouter({
     {
       path: '/hotels',
       name: 'hotels',
+      component: () => import('../views/HotelsView.vue'),
       meta: { requiresAuth: true },
-      component: () => import('../views/HotelsView.vue')
+      children: [
+        {
+          path: ':idHotel',
+          name: 'rooms',
+          component: () => import('../views/RoomsView.vue'),
+        }
+      ]
     },
     {
       path: '/user',
@@ -52,7 +59,7 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, requiresRole: "Admin" },
       component: () => import('../views/DashboardView.vue')
     },
     {
