@@ -12,6 +12,7 @@ const headers: ReadonlyHeaders = [
     { title: 'Address', align: 'center', key: 'address' },
     { title: 'City', align: 'center', key: 'city' },
     { title: 'Number of rooms', align: 'center', key: 'numberOfRooms' },
+    { title: '', align: 'center' },
 ];
 
 const { user, isAuthed, jwt } = useUserStore();
@@ -43,11 +44,16 @@ fetch(baseUrl + "hotels", requestOptions)
     <v-container>
         <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'desc' }]">
             <template v-slot:item="{ item }">
-                <tr @click="router.push({ name: 'hotels', params: { idHotel: item.id } })" style="cursor: pointer">
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.address }}</td>
-                    <td>{{ item.city }}</td>
-                    <td>{{ item.numberOfRooms }}</td>
+                <tr>
+                    <td>
+                        {{ item.name }}</td>
+                    <td align="center">{{ item.address }}</td>
+                    <td align="center">{{ item.city }}</td>
+                    <td align="center">{{ item.numberOfRooms }}</td>
+                    <!-- <td align="center" @click="router.push({ name: 'hotelrooms', params: { idHotel: item.id } })"
+                        style="cursor: pointer"> Ver </td> -->
+                    <td align="center" @click="router.push({ path: `hotels/${item.id}` })" style="cursor: pointer"> Ver
+                    </td>
                 </tr>
             </template>
         </v-data-table>

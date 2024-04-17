@@ -29,13 +29,19 @@ const router = createRouter({
       name: 'hotels',
       component: () => import('../views/HotelsView.vue'),
       meta: { requiresAuth: true },
-      children: [
-        {
-          path: ':idHotel',
-          name: 'rooms',
-          component: () => import('../views/RoomsView.vue'),
-        }
-      ]
+      // children: [
+      //   {
+      //     path: ':idHotel',
+      //     name: 'hotelrooms',
+      //     component: () => import('../views/RoomsView.vue'),
+      //   }
+      // ]
+    },
+    {
+      path: '/hotels/:idHotel',
+      name: 'hotelrooms',
+      component: () => import('../views/RoomsView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/user',

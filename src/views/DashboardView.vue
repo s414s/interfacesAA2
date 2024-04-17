@@ -39,8 +39,8 @@ console.log(hotels);
             <v-row no-gutters class="border">
                 <v-col cols="12" sm="12">
                     <v-sheet class="ma-1 pa-1 border">
-                        <p>Column 1 por lo que</p>
-                        <p>Column 1 por lo que pueda pasar</p>
+                        <p>Column 1 data</p>
+                        <p>Column 1 data</p>
                     </v-sheet>
                 </v-col>
             </v-row>
@@ -48,13 +48,14 @@ console.log(hotels);
             <v-row no-gutters class="border">
                 <v-col cols="12" sm="6">
                     <v-sheet class="ma-1 pa-1">
-                        Column 1 por lo que
+                        <p>Column 1 data</p>
                     </v-sheet>
                     <v-sheet class="ma-1 pa-1">
-                        Column 2
+                        <p>Column 1 data</p>
                     </v-sheet>
                 </v-col>
             </v-row>
+
         </v-container>
         <HotelsTable :hotels="hotels" />
     </main>

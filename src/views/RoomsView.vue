@@ -5,10 +5,8 @@ import type { Room } from '@/types/TypesDTO';
 import { reactive } from 'vue';
 import { useRoute } from 'vue-router';
 
-console.log("WE areeeeeeeeeee in rooms");
-
 const route = useRoute();
-const hotelId = parseInt(route.params.hotelId.toString());
+const idHotel = parseInt(route.params.idHotel.toString());
 // https://vueschool.io/lessons/route-meta-fields?friend=vuerouter
 
 const { jwt } = useUserStore();
@@ -42,6 +40,7 @@ fetch(baseUrl + "hotels/" + "hotelId/" + "rooms", requestOptions)
 
 <template>
     <h1>Rooms</h1>
+    <h1>{{ idHotel }}</h1>
     <v-container>
         <v-row justify="start">
             <v-date-picker width="400"></v-date-picker>

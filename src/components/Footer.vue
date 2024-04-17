@@ -14,7 +14,7 @@
     justify-content: center;
     padding: 1rem;
     /* border: 2px solid green; */
-    background-color: bisque;
+    background-color: beige;
     width: 100vw;
 }
 </style>

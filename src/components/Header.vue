@@ -21,12 +21,15 @@ const { logout } = useUserStore();
     display: flex;
     flex-direction: row;
     justify-content: center;
-    border: 2px solid green;
+    padding: 2rem 0rem;
+    /* border: 2px solid green; */
     gap: 2rem;
     /* width: 100vw; */
 }
 
-.cell {
-    border: 2px solid green;
+a,
+a:visited {
+    color: black;
+    text-decoration: none;
 }
 </style>
