@@ -6,27 +6,20 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
-// const app = createApp(App);
-// app.use(createPinia());
-// app.use(router);
-// app.mount('#app');
-
-// ====================== Vuetify
-
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
-const vuetify = createVuetify({
-    components,
-    directives,
-});
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
-const pinia = createPinia();
+// const vuetify = 
+// const pinia = createPinia();
 
 createApp(App)
-    .use(vuetify)
-    .use(pinia)
+    .use(createVuetify({ components, directives }))
+    .use(createPinia())
     .use(router)
+    .component('VueDatePicker', VueDatePicker)
     .mount('#app');

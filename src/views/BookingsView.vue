@@ -29,7 +29,6 @@ const items = ref([
 // const email = useField('email');
 // const select = useField('select');
 // const checkbox = useField('checkbox')
-
 </script>
 
 <template>

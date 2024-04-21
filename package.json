@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^8.5.0",
     "jwt-decode": "^4.0.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
