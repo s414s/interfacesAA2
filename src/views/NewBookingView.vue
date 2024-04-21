@@ -15,6 +15,8 @@ const { jwt } = useUserStore();
 const isLoading = ref<boolean>(true);
 const room = ref<Room | null>(null);
 const guests = ref(1);
+const name = ref("");
+const dni = ref("");
 
 const currentDate = new Date();
 const startDate = ref<Date>(currentDate);
@@ -49,6 +51,15 @@ const decreaseGuests = () => { guests.value = guests.value === 1 ? 1 : guests.va
 </script>
 
 <template>
+
+    <div v-if="isLoading">
+        <v-container>
+            <v-row justify="center">
+                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
+            </v-row>
+        </v-container>
+    </div>
+
     <div class="title">
         <h1>New Booking</h1>
         <v-row justify="space-between">
@@ -71,30 +82,27 @@ const decreaseGuests = () => { guests.value = guests.value === 1 ? 1 : guests.va
             </v-row>
         </v-col>
 
-    </div>
+        <v-sheet class="mx-auto" width="300">
+            <v-form @submit.prevent>
+                <v-text-field v-model="name" label="Guest name"></v-text-field>
+                <v-text-field v-model="dni" label="DNI"></v-text-field>
 
-    <div v-if="isLoading">
-        <v-container>
-            <v-row justify="center">
-                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
-            </v-row>
-        </v-container>
-    </div>
+                <!-- <v-btn class="mt-2" color="info" type="submit" block>Submit</v-btn> -->
 
+            </v-form>
+        </v-sheet>
+    </div>
     <v-container v-if="!isLoading">
         <v-row justify="center">
-            <!-- https://vuetifyjs.com/en/components/date-pickers/#allowed-dates -->
-
             <div>
-                <h3>Room Info:</h3>
                 <v-row justify="space-between" class="info">
+                    <p>Room Info:</p>
                     <p>Capacity: {{ room?.capacity }}</p>
                     <p>Storey: {{ room?.storey }}</p>
                     <p>Type: {{ room?.type }}</p>
                 </v-row>
             </div>
         </v-row>
-
         <v-row justify="center">
             <v-btn color="secondary" @onclick="console.log('button pressed')">Book</v-btn>
         </v-row>

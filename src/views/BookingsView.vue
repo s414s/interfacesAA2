@@ -1,54 +1,74 @@
-<!-- <script setup lang="ts">
-</script> -->
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import type { VDataTable } from 'vuetify/components';
+import type { Booking, Hotel, ReadonlyHeaders } from '@/types/TypesDTO';
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { capitalizeFirstLetter } from '@/helpers/wordUtils';
 
-// export default {
-//     data: () => ({
-//         firstName: '',
-//         rules: [
-//             value => {
-//                 if (value) return true;
+const headers: ReadonlyHeaders = [
+    { title: 'Hotel Name', align: 'center', key: 'hotelName' },
+    { title: 'From', align: 'center', key: 'from' },
+    { title: 'Until', align: 'center', key: 'until' },
+];
 
-//                 return 'You must enter a first name.';
-//             },
-//         ],
-//     }),
-// };
+const router = useRouter();
+const userStore = useUserStore();
+const { jwt } = storeToRefs(userStore);
 
-const items = ref([
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-]);
+const isLoading = ref<boolean>(true);
+const bookings: Booking[] = reactive([]);
 
-// install vee validate
-// const name = useField('name');
-// const phone = useField('phone');
-// const email = useField('email');
-// const select = useField('select');
-// const checkbox = useField('checkbox')
+const baseUrl = "http://localhost:5093/";
+const requestOptions = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    },
+};
+
+fetch(baseUrl + "bookings", requestOptions)
+    .then(res => res.json())
+    .then(data => {
+        bookings.push(...data);
+        isLoading.value = false;
+    });
+
 </script>
 
 <template>
-    <v-sheet class="mx-auto" width="300">
-        <h3>New Booking</h3>
-        <v-form @submit.prevent>
-            <v-text-field label="Guest name"></v-text-field>
-            <v-text-field label="DNI"></v-text-field>
+    <div class="title">
+        <h1>Bookings</h1>
+    </div>
 
-            <v-select :items="items" label="Hotel"></v-select>
-            <v-select :items="items" label="Room"></v-select>
+    <div v-if="isLoading">
+        <v-container>
+            <v-row justify="center">
+                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
+            </v-row>
+        </v-container>
+    </div>
 
-            <v-btn class="mt-2" color="info" type="submit" block>Submit</v-btn>
-        </v-form>
-    </v-sheet>
+    <v-container v-if="!isLoading">
+        <v-data-table :headers="headers" :items="bookings" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
+            <template v-slot:item="{ item }">
+                <tr @click="router.push({ path: `hotels/${item.id}` })" style="cursor: pointer">
+                    <td align="center"> {{ capitalizeFirstLetter(item.hotelName) }}</td>
+                    <td align="center">{{ item.from }}</td>
+                    <td align="center">{{ item.until }}</td>
+                </tr>
+            </template>
+        </v-data-table>
+    </v-container>
+
 </template>
 
 <style>
-h3 {
-    text-align: center;
-    padding: 1rem;
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 </style>
