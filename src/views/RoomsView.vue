@@ -2,7 +2,7 @@
 import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
 import type { Room, ReadonlyHeaders } from '@/types/TypesDTO';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -16,6 +16,7 @@ const headers: ReadonlyHeaders = [
     { title: 'Capacity', align: 'center', key: 'capacity' },
 ];
 
+const isLoading = ref(true);
 const rooms: Room[] = reactive([]);
 
 const requestOptions = {
@@ -31,6 +32,7 @@ fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
     .then(res => res.json())
     .then(data => {
         rooms.push(...data.rooms);
+        isLoading.value = false;
     });
 </script>
 
@@ -38,7 +40,16 @@ fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
     <div class="title">
         <h1>Rooms</h1>
     </div>
-    <v-container>
+
+    <div v-if="isLoading">
+        <v-container>
+            <v-row justify="center">
+                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
+            </v-row>
+        </v-container>
+    </div>
+
+    <v-container v-if="!isLoading">
         <v-data-table :headers="headers" :items="rooms" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
             <template v-slot:item="{ item }">
                 <tr @click="router.push({ path: `/newbooking/${item.id}` })" style="cursor: pointer">

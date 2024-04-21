@@ -2,7 +2,7 @@
 import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
 import type { Hotel, ReadonlyHeaders } from '@/types/TypesDTO';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { capitalizeFirstLetter } from '@/helpers/wordUtils';
@@ -15,11 +15,12 @@ const headers: ReadonlyHeaders = [
     { title: 'N of rooms', align: 'center', key: 'numberOfRooms' },
 ];
 
-const userStore = useUserStore();
-const { isAdmin, isAuthed, jwt, user } = storeToRefs(userStore);
-
 const router = useRouter();
 
+const userStore = useUserStore();
+const { isAdmin, jwt } = storeToRefs(userStore);
+
+const isLoading = ref<boolean>(true);
 const hotels: Hotel[] = reactive([]);
 
 const baseUrl = "http://localhost:5093/";
@@ -35,6 +36,7 @@ fetch(baseUrl + "hotels", requestOptions)
     .then(res => res.json())
     .then(data => {
         hotels.push(...data);
+        isLoading.value = false;
     });
 
 </script>
@@ -44,7 +46,16 @@ fetch(baseUrl + "hotels", requestOptions)
         <h1>Hotels</h1>
         <button v-show="isAdmin">Create new hotel</button>
     </div>
-    <v-container>
+
+    <div v-if="isLoading">
+        <v-container>
+            <v-row justify="center">
+                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
+            </v-row>
+        </v-container>
+    </div>
+
+    <v-container v-if="!isLoading">
         <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
             <template v-slot:item="{ item }">
                 <tr @click="router.push({ path: `hotels/${item.id}` })" style="cursor: pointer">

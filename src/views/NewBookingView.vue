@@ -12,7 +12,7 @@ const route = useRoute();
 const idRoom = +route.params.idRoom;
 const { jwt } = useUserStore();
 
-const isLoading = ref<boolean>(false);
+const isLoading = ref<boolean>(true);
 const room = ref<Room | null>(null);
 const guests = ref(1);
 
@@ -36,7 +36,6 @@ fetch(baseUrl + "rooms/" + idRoom, requestOptions)
     .then(data => {
         room.value = data;
         isLoading.value = false;
-        console.log(data);
     });
 
 function bookRoom(from: Date, until: Date, idRoom: number, nGuests: number) {
@@ -74,13 +73,13 @@ const decreaseGuests = () => { guests.value = guests.value === 1 ? 1 : guests.va
 
     </div>
 
-    <template v-if="isLoading">
+    <div v-if="isLoading">
         <v-container>
             <v-row justify="center">
                 <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
             </v-row>
         </v-container>
-    </template>
+    </div>
 
     <v-container v-if="!isLoading">
         <v-row justify="center">
