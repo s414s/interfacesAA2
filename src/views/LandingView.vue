@@ -1,6 +1,7 @@
 <template>
-    <h1>Landing Page</h1>
-    <RouterLink to="/login">Login</RouterLink>
+    <div class="title">
+        <h1>Landing Page</h1>
+    </div>
     <v-container>
         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
             industry's
@@ -16,3 +17,11 @@
 
     </v-container>
 </template>
+
+<style>
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+</style>

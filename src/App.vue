@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
-import HelloWorld from './components/HelloWorld.vue';
+import { RouterView } from 'vue-router';
 
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 </script>
 
 <template>
-    <div class="main-container full-height full-width">
+    <div class="main-container">
         <Header />
-        <RouterView />
+        <main class="content">
+            <RouterView />
+        </main>
         <Footer />
     </div>
 </template>
@@ -19,15 +20,12 @@ import Footer from './components/Footer.vue';
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    /* border: 2px solid purple; */
-}
-
-.full-height {
+    width: 100vw;
     height: 100vh;
 }
 
-.full-width {
-    width: 100vw;
+.content {
+    flex-grow: 1;
+    width: 100%;
 }
 </style>

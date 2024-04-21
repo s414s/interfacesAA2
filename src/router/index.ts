@@ -1,10 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import { useUserStore } from '@/stores/userStore';
-// import UserDetailsView from '../views/UserDetailsView.vue';
-
-// TODO - leer
-// https://router.vuejs.org/guide/advanced/meta.html
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,7 +43,6 @@ const router = createRouter({
       name: 'user',
       meta: { requiresAuth: true },
       component: () => import('../views/UserDetailsView.vue')
-      // component: UserDetailsView,
     },
     {
       path: '/bookings/:idHotel',
@@ -64,7 +59,7 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      meta: { requiresAuth: true, requiresRole: "Admin" },
+      meta: { requiresRole: "Admin" },
       component: () => import('../views/DashboardView.vue')
     },
     {
@@ -77,11 +72,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const { isAuthed } = useUserStore();
+  const { isAuthed, isAdmin } = useUserStore();
 
   if (to.name === 'login' && isAuthed) return '/';
 
-  //if (to.meta.requiresAuth && !isAuthed) return '/login';
+  if (to.meta.requiresRole === "Admin" && !isAdmin) return '/home';
   if (to.meta.requiresAuth && !isAuthed) return '/landing';
 });
 

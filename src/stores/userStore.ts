@@ -57,11 +57,13 @@ export const useUserStore = defineStore('user', () => {
 
     function logout() {
         user.id = 0;
-        user.name = "username";
-        user.surname = "userSurname";
-        user.role = "role";
+        user.name = "";
+        user.surname = "";
+        user.role = "";
 
         isAuthed.value = false;
+        isAdmin.value = false;
+
         jwt.value = null;
         localStorage.removeItem("token");
     }

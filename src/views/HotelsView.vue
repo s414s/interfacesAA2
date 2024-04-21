@@ -4,6 +4,7 @@ import type { VDataTable } from 'vuetify/components';
 import type { Hotel } from '@/types/TypesDTO';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 type ReadonlyHeaders = VDataTable['$props']['headers'];
 
@@ -14,13 +15,14 @@ const headers: ReadonlyHeaders = [
     { title: 'N of rooms', align: 'center', key: 'numberOfRooms' },
 ];
 
-const { user, isAuthed, isAdmin, jwt } = useUserStore();
+const userStore = useUserStore();
+const { isAdmin, isAuthed, jwt, user } = storeToRefs(userStore);
+
 const router = useRouter();
 
 const hotels: Hotel[] = reactive([]);
 
 const baseUrl = "http://localhost:5093/";
-
 const requestOptions = {
     method: 'GET',
     headers: {
@@ -38,9 +40,10 @@ fetch(baseUrl + "hotels", requestOptions)
 </script>
 
 <template>
-    <h2>Hotels</h2>
-
-    <button v-if="isAdmin">Create new hotel</button>
+    <div class="title">
+        <h1>Hotels</h1>
+        <button v-show="isAdmin">Create new hotel</button>
+    </div>
 
     <v-container>
         <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
@@ -56,3 +59,11 @@ fetch(baseUrl + "hotels", requestOptions)
     </v-container>
 
 </template>
+
+<style>
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+</style>

@@ -28,35 +28,43 @@ fetch(baseUrl + "/hotels", requestOptions)
     .then(res => res.json())
     .then(data => hotels.push(...data));
 
-console.log(hotels);
-
+// console.log(hotels);
 </script>
 
 <template>
-    <main>
-        <h2>Dashboard</h2>
-        <v-container class="border">
-            <v-row no-gutters class="border">
-                <v-col cols="12" sm="12">
-                    <v-sheet class="ma-1 pa-1 border">
-                        <p>Column 1 data</p>
-                        <p>Column 1 data</p>
-                    </v-sheet>
-                </v-col>
-            </v-row>
+    <div class="title">
+        <h1>Dashboard</h1>
+    </div>
 
-            <v-row no-gutters class="border">
-                <v-col cols="12" sm="6">
-                    <v-sheet class="ma-1 pa-1">
-                        <p>Column 1 data</p>
-                    </v-sheet>
-                    <v-sheet class="ma-1 pa-1">
-                        <p>Column 1 data</p>
-                    </v-sheet>
-                </v-col>
-            </v-row>
+    <v-container class="border">
+        <v-row no-gutters class="border">
+            <v-col cols="12" sm="12">
+                <v-sheet class="ma-1 pa-1 border">
+                    <p>Column 1 data</p>
+                    <p>Column 1 data</p>
+                </v-sheet>
+            </v-col>
+        </v-row>
 
-        </v-container>
-        <HotelsTable :hotels="hotels" />
-    </main>
+        <v-row no-gutters class="border">
+            <v-col cols="12" sm="6">
+                <v-sheet class="ma-1 pa-1">
+                    <p>Column 1 data</p>
+                </v-sheet>
+                <v-sheet class="ma-1 pa-1">
+                    <p>Column 1 data</p>
+                </v-sheet>
+            </v-col>
+        </v-row>
+
+    </v-container>
+    <HotelsTable :hotels="hotels" />
 </template>
+
+<style>
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+</style>
