@@ -10,6 +10,12 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/landing',
+      name: 'landing',
+      meta: { requiresAuth: false },
+      component: () => import('../views/LandingView.vue')
+    },
+    {
       path: '/',
       name: 'home',
       meta: { requiresAuth: true },
@@ -71,12 +77,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  // the router starts its navigation after the router is installed and pinia will be installed too
   const { isAuthed } = useUserStore();
 
-  if (to.meta.requiresAuth && !isAuthed) return '/login';
-
   if (to.name === 'login' && isAuthed) return '/';
+
+  //if (to.meta.requiresAuth && !isAuthed) return '/login';
+  if (to.meta.requiresAuth && !isAuthed) return '/landing';
 });
 
 export default router;

@@ -14,7 +14,7 @@ const headers: ReadonlyHeaders = [
     { title: 'N of rooms', align: 'center', key: 'numberOfRooms' },
 ];
 
-const { user, isAuthed, jwt } = useUserStore();
+const { user, isAuthed, isAdmin, jwt } = useUserStore();
 const router = useRouter();
 
 const hotels: Hotel[] = reactive([]);
@@ -39,6 +39,8 @@ fetch(baseUrl + "hotels", requestOptions)
 
 <template>
     <h2>Hotels</h2>
+
+    <button v-if="isAdmin">Create new hotel</button>
 
     <v-container>
         <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">

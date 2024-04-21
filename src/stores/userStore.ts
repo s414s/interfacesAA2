@@ -66,5 +66,5 @@ export const useUserStore = defineStore('user', () => {
         localStorage.removeItem("token");
     }
 
-    return { user, isAuthed, fetchUser, jwt, setJwt, setIsAuthed, logout };
+    return { user, isAuthed, isAdmin, fetchUser, jwt, setJwt, setIsAuthed, logout };
 });
