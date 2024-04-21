@@ -1,27 +1,20 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
-import type { VDataTable } from 'vuetify/components';
-import type { Room } from '@/types/TypesDTO';
-import { reactive } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const idHotel = parseInt(route.params.idHotel.toString());
-// https://vueschool.io/lessons/route-meta-fields?friend=vuerouter
-
+const idRoom = +route.params.idRoom;
 const { jwt } = useUserStore();
 
-type ReadonlyHeaders = VDataTable['$props']['headers'];
+const startDate = ref<Date | null>(null);
+const endDate = ref<Date | null>(null);
 
-const headers: ReadonlyHeaders = [
-    { title: 'Storey', align: 'center', key: 'address' },
-    { title: 'Type', align: 'center', key: 'city' },
-    { title: 'Capacity', align: 'center', key: 'numberOfRooms' },
-];
+// Setting start to now and end to 24 hours later
+startDate.value = new Date();
+endDate.value = new Date(startDate.value.getTime() + 24 * 60 * 60 * 1000);
 
-const rooms: Room[] = reactive([]);
 
-const baseUrl = "http://localhost:5093/";
 const requestOptions = {
     method: 'GET',
     headers: {
@@ -30,18 +23,19 @@ const requestOptions = {
     },
 };
 
-fetch(baseUrl + "hotels/" + "hotelId/" + "rooms", requestOptions)
-    .then(res => res.json())
-    .then(data => {
-        rooms.push(...data);
-    });
+function bookRoom(from: Date, until: Date, idRoom: number) {
+    const baseUrl = "http://localhost:5093/";
+    fetch(baseUrl + "rooms/" + "idRoom", requestOptions)
+        .then(res => res.json())
+        .then(data => { console.log(data); });
+};
 
 </script>
 
 <template>
     <div class="title">
         <h1>New Booking</h1>
-        <p>{{ idHotel }}</p>
+        <p>{{ idRoom }}</p>
     </div>
 
     <v-container>

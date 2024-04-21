@@ -8,7 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 const { jwt } = useUserStore();
-const idHotel = parseInt(route.params.idHotel.toString());
+const idHotel = +route.params.idHotel;
 
 const headers: ReadonlyHeaders = [
     { title: 'Storey', align: 'center', key: 'storey' },
@@ -18,7 +18,6 @@ const headers: ReadonlyHeaders = [
 
 const rooms: Room[] = reactive([]);
 
-const baseUrl = "http://localhost:5093/";
 const requestOptions = {
     method: 'GET',
     headers: {
@@ -27,13 +26,12 @@ const requestOptions = {
     },
 };
 
-//fetch(baseUrl + "hotels/" + "hotelId/" + "rooms", requestOptions)
+const baseUrl = "http://localhost:5093/";
 fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
     .then(res => res.json())
     .then(data => {
         rooms.push(...data.rooms);
     });
-
 </script>
 
 <template>
@@ -43,7 +41,7 @@ fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
     <v-container>
         <v-data-table :headers="headers" :items="rooms" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
             <template v-slot:item="{ item }">
-                <tr @click="router.push({ path: `bookings/${item.id}` })" style="cursor: pointer">
+                <tr @click="router.push({ path: `/newbooking/${item.id}` })" style="cursor: pointer">
                     <td align="center"> {{ item.storey }}</td>
                     <td align="center">{{ item.type }}</td>
                     <td align="center">{{ item.capacity }}</td>

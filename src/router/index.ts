@@ -6,16 +6,16 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/landing',
-      name: 'landing',
-      meta: { requiresAuth: false },
-      component: () => import('../views/LandingView.vue')
-    },
-    {
       path: '/',
       name: 'home',
       meta: { requiresAuth: true },
       component: HomeView
+    },
+    {
+      path: '/landing',
+      name: 'landing',
+      meta: { requiresAuth: false },
+      component: () => import('../views/LandingView.vue')
     },
     {
       path: '/about',
@@ -36,10 +36,10 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/bookings/:idRoom',
+      path: '/newbooking/:idRoom',
       name: 'newBooking',
-      component: () => import('../views/NewBookingView.vue'),
       meta: { requiresAuth: true },
+      component: () => import('../views/NewBookingView.vue'),
     },
     {
       path: '/user',
@@ -50,14 +50,14 @@ const router = createRouter({
     {
       path: '/bookings/:idHotel',
       name: 'bookings',
+      component: () => import('../views/BookingsView.vue'),
       meta: { requiresAuth: true },
-      component: () => import('../views/BookingsView.vue')
     },
     {
       path: '/bookings',
       name: 'bookings',
+      component: () => import('../views/BookingsView.vue'),
       meta: { requiresAuth: true },
-      component: () => import('../views/BookingsView.vue')
     },
     {
       path: '/dashboard',
@@ -80,6 +80,7 @@ router.beforeEach((to) => {
   if (to.name === 'login' && isAuthed) return '/';
 
   if (to.meta.requiresRole === "Admin" && !isAdmin) return '/home';
+
   if (to.meta.requiresAuth && !isAuthed) return '/landing';
 });
 

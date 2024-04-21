@@ -23,6 +23,8 @@ export const useUserStore = defineStore('user', () => {
     const jwt = ref<string | null>(localStorage.getItem("token") ? localStorage.getItem("token") : null);
     const user = reactive<User>({ id: 0, name: "name", surname: "surname", role: "role" });
 
+    // TODO if exists: decode an fill properties
+
     function setJwt(newJwt: string) {
         window.localStorage.setItem("token", newJwt);
         jwt.value = newJwt;
