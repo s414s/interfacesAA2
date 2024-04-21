@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
-import type { Hotel } from '@/types/TypesDTO';
+import type { Hotel, ReadonlyHeaders } from '@/types/TypesDTO';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { capitalizeFirstLetter } from '@/helpers/wordUtils';
 
-type ReadonlyHeaders = VDataTable['$props']['headers'];
-
+// type ReadonlyHeaders = VDataTable['$props']['headers'];
 const headers: ReadonlyHeaders = [
     { title: 'Hotel Name', align: 'center', key: 'name' },
     { title: 'Address', align: 'center', key: 'address' },
@@ -44,12 +44,11 @@ fetch(baseUrl + "hotels", requestOptions)
         <h1>Hotels</h1>
         <button v-show="isAdmin">Create new hotel</button>
     </div>
-
     <v-container>
         <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
             <template v-slot:item="{ item }">
                 <tr @click="router.push({ path: `hotels/${item.id}` })" style="cursor: pointer">
-                    <td align="center"> {{ item.name }}</td>
+                    <td align="center"> {{ capitalizeFirstLetter(item.name) }}</td>
                     <td align="center">{{ item.address }}</td>
                     <td align="center">{{ item.city }}</td>
                     <td align="center">{{ item.numberOfRooms }}</td>

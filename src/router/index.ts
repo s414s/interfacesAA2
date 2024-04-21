@@ -20,9 +20,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       meta: { requiresAuth: true },
       component: () => import('../views/AboutView.vue')
     },
@@ -36,6 +33,12 @@ const router = createRouter({
       path: '/hotels/:idHotel',
       name: 'hotelrooms',
       component: () => import('../views/RoomsView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/bookings/:idRoom',
+      name: 'newBooking',
+      component: () => import('../views/NewBookingView.vue'),
       meta: { requiresAuth: true },
     },
     {

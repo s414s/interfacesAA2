@@ -1,3 +1,5 @@
+import type { VDataTable } from "vuetify/components/VDataTable";
+
 export interface User {
     id: number,
     name: string,
@@ -43,3 +45,5 @@ export interface SignUp {
     surname: string;
     password: string;
 }
+
+export type ReadonlyHeaders = VDataTable['$props']['headers'];

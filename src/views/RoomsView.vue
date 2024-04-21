@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
-import type { Room } from '@/types/TypesDTO';
+import type { Room, ReadonlyHeaders } from '@/types/TypesDTO';
 import { reactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
-const idHotel = parseInt(route.params.idHotel.toString());
-// https://vueschool.io/lessons/route-meta-fields?friend=vuerouter
-
+const router = useRouter();
 const { jwt } = useUserStore();
-
-type ReadonlyHeaders = VDataTable['$props']['headers'];
+const idHotel = parseInt(route.params.idHotel.toString());
 
 const headers: ReadonlyHeaders = [
-    { title: 'Storey', align: 'center', key: 'address' },
-    { title: 'Type', align: 'center', key: 'city' },
-    { title: 'Capacity', align: 'center', key: 'numberOfRooms' },
+    { title: 'Storey', align: 'center', key: 'storey' },
+    { title: 'Type', align: 'center', key: 'type' },
+    { title: 'Capacity', align: 'center', key: 'capacity' },
 ];
 
 const rooms: Room[] = reactive([]);
@@ -30,27 +27,36 @@ const requestOptions = {
     },
 };
 
-fetch(baseUrl + "hotels/" + "hotelId/" + "rooms", requestOptions)
+//fetch(baseUrl + "hotels/" + "hotelId/" + "rooms", requestOptions)
+fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
     .then(res => res.json())
     .then(data => {
-        rooms.push(...data);
+        rooms.push(...data.rooms);
     });
 
 </script>
 
 <template>
-    <h1>Rooms</h1>
-    <h1>{{ idHotel }}</h1>
+    <div class="title">
+        <h1>Rooms</h1>
+    </div>
     <v-container>
-        <v-row justify="start">
-            <v-date-picker width="400"></v-date-picker>
-        </v-row>
+        <v-data-table :headers="headers" :items="rooms" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
+            <template v-slot:item="{ item }">
+                <tr @click="router.push({ path: `bookings/${item.id}` })" style="cursor: pointer">
+                    <td align="center"> {{ item.storey }}</td>
+                    <td align="center">{{ item.type }}</td>
+                    <td align="center">{{ item.capacity }}</td>
+                </tr>
+            </template>
+        </v-data-table>
     </v-container>
-
-    <v-container>
-        <v-row justify="center">
-            <v-date-picker width="400"></v-date-picker>
-        </v-row>
-    </v-container>
-
 </template>
+
+<style>
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+</style>
