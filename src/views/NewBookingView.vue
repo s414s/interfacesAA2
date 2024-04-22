@@ -4,6 +4,8 @@ import type { Room } from '@/types/TypesDTO';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { GET, POST } from '@/helpers/api';
+
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
@@ -17,7 +19,8 @@ const guests = ref(1);
 const name = ref("");
 const dni = ref("");
 
-console.log("datetime in a format", new Date().toISOString().substring(0, 10));
+// console.log("datetime in a format", new Date().toISOString().substring(0, 10));
+console.log("datetime in a format", new Date().toISOString());
 
 const router = useRouter();
 
@@ -29,6 +32,9 @@ const requestOptions = {
     },
 };
 
+const data = GET("rooms/" + idRoom, jwt);
+console.log("DATAAAAAA", data);
+
 const baseUrl = "http://localhost:5093/";
 fetch(baseUrl + "rooms/" + idRoom, requestOptions)
     .then(res => res.json())
@@ -37,7 +43,7 @@ fetch(baseUrl + "rooms/" + idRoom, requestOptions)
         isLoading.value = false;
     });
 
-function bookRoom(from: Date, until: Date, idRoom: number, nGuests: number) {
+function bookRoom(from: Date, until: Date, idRoom: number, nGuests: number, name: string, dni: string) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -48,12 +54,7 @@ function bookRoom(from: Date, until: Date, idRoom: number, nGuests: number) {
             from: from,
             until: until,
             number: nGuests,
-            guests: [
-                {
-                    name: "string",
-                    dni: "string"
-                }
-            ]
+            guests: [{ name: name, dni: dni }]
         })
     };
 
