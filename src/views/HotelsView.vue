@@ -44,7 +44,6 @@ fetch(baseUrl + "hotels", requestOptions)
 <template>
     <div class="title">
         <h1>Hotels</h1>
-        <button v-show="isAdmin">Create new hotel</button>
     </div>
 
     <div v-if="isLoading">

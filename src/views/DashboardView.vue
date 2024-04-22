@@ -4,17 +4,12 @@ import HotelsTable from '@/components/HotelsTable.vue';
 import type { Hotel } from '@/types/TypesDTO';
 import { useUserStore } from '@/stores/userStore';
 
-const { user, isAuthed, jwt } = useUserStore();
+const { jwt } = useUserStore();
 
-// const hotels: Hotel[] = reactive([
-//     { id: 1, name: 'Hotel A', city: 'City A', numberOfRooms: 2, rooms: [] },
-//     { id: 2, name: 'Hotel B', city: 'City B', numberOfRooms: 2, rooms: [] },
-// ]);
 
 const hotels: Hotel[] = reactive([]);
 
 const baseUrl = "http://localhost:5093/";
-
 const requestOptions = {
     method: 'GET',
     headers: {
@@ -28,7 +23,19 @@ fetch(baseUrl + "/hotels", requestOptions)
     .then(res => res.json())
     .then(data => hotels.push(...data));
 
-// console.log(hotels);
+const options = {
+    chart: {
+        id: 'vuechart-example'
+    },
+    xaxis: {
+        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+    }
+};
+const series = [{
+    name: 'series-1',
+    data: [30, 40, 45, 50, 49, 60, 70, 91]
+}]
+
 </script>
 
 <template>
@@ -37,28 +44,10 @@ fetch(baseUrl + "/hotels", requestOptions)
     </div>
 
     <v-container class="border">
-        <v-row no-gutters class="border">
-            <v-col cols="12" sm="12">
-                <v-sheet class="ma-1 pa-1 border">
-                    <p>Column 1 data</p>
-                    <p>Column 1 data</p>
-                </v-sheet>
-            </v-col>
-        </v-row>
-
-        <v-row no-gutters class="border">
-            <v-col cols="12" sm="6">
-                <v-sheet class="ma-1 pa-1">
-                    <p>Column 1 data</p>
-                </v-sheet>
-                <v-sheet class="ma-1 pa-1">
-                    <p>Column 1 data</p>
-                </v-sheet>
-            </v-col>
-        </v-row>
-
+        <!-- https://medium.com/@vickiec630/easy-way-to-integrate-apexcharts-into-vue-ccb17f06e31e -->
+        <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
     </v-container>
-    <HotelsTable :hotels="hotels" />
+
 </template>
 
 <style>

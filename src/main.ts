@@ -14,12 +14,15 @@ import * as directives from 'vuetify/directives';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
-// const vuetify = 
-// const pinia = createPinia();
+// HACK: No typescript declaration file available: https://github.com/apexcharts/vue3-apexcharts/issues/2
+// eslint-disable-next-line
+// @ts-ignore
+import VueApexCharts from "vue3-apexcharts";
 
 createApp(App)
     .use(createVuetify({ components, directives }))
     .use(createPinia())
     .use(router)
+    .use(VueApexCharts)
     .component('VueDatePicker', VueDatePicker)
     .mount('#app');

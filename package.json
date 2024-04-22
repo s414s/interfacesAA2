@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^8.5.0",
+    "apexcharts": "^3.49.0",
     "jwt-decode": "^4.0.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
+    "vue3-apexcharts": "^1.5.2",
     "vuetify": "^3.5.13"
   },
   "devDependencies": {
