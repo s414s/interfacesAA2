@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
 import type { Room } from '@/types/TypesDTO';
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import VueDatePicker from '@vuepic/vue-datepicker';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
@@ -18,11 +17,9 @@ const guests = ref(1);
 const name = ref("");
 const dni = ref("");
 
-const currentDate = new Date();
-const startDate = ref<Date>(currentDate);
-const endDate = ref<Date>(new Date(currentDate.getTime() + 24 * 60 * 60 * 1000));
-
 console.log("datetime in a format", new Date().toISOString().substring(0, 10));
+
+const router = useRouter();
 
 const requestOptions = {
     method: 'GET',
@@ -41,13 +38,46 @@ fetch(baseUrl + "rooms/" + idRoom, requestOptions)
     });
 
 function bookRoom(from: Date, until: Date, idRoom: number, nGuests: number) {
-    fetch(baseUrl + "rooms/" + "idRoom", requestOptions)
-        .then(res => res.json())
-        .then(data => { console.log(data); });
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+        },
+        body: JSON.stringify({
+            from: from,
+            until: until,
+            number: nGuests,
+            guests: [
+                {
+                    name: "string",
+                    dni: "string"
+                }
+            ]
+        })
+    };
+
+    fetch(baseUrl + "rooms/" + idRoom, requestOptions)
+        .then(res => {
+            if (!res.ok) {
+                alert(`Error realizando la reserva`);
+                throw new Error(`Error realizando la reserva`);
+                // throw new Error(`HTTP error! status: ${res.status} ${res.statusText}`);
+            }
+            router.push({ path: `home/` });
+        })
+        .catch(err => alert(err));
 };
 
 const increaseGuests = () => { guests.value = guests.value === 4 ? 4 : guests.value + 1; };
 const decreaseGuests = () => { guests.value = guests.value === 1 ? 1 : guests.value - 1; };
+
+const date = ref();
+onMounted(() => {
+    const startDate = new Date();
+    const endDate = new Date(new Date().setDate(startDate.getDate() + 1));
+    date.value = [startDate, endDate];
+});
 </script>
 
 <template>
@@ -62,14 +92,12 @@ const decreaseGuests = () => { guests.value = guests.value === 1 ? 1 : guests.va
 
     <div class="title">
         <h1>New Booking</h1>
+
         <v-row justify="space-between">
             <v-col cols="auto">
-                <p>From:</p>
-                <Datepicker :enable-time-picker="false" v-model="startDate" />
-            </v-col>
-            <v-col cols="auto">
-                <p>Until:</p>
-                <Datepicker :enable-time-picker="false" v-model="endDate" />
+                <p>Dates:</p>
+                <Datepicker :enable-time-picker="false" v-model="date"
+                    multi-calendars="{ solo: false, static: true, count: 2 }" solo range min-date="new Date()" />
             </v-col>
         </v-row>
 
