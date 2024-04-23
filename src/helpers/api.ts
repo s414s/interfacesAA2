@@ -1,9 +1,9 @@
 type QueryParams = { [key: string]: string | number | boolean; };
-type BodyParams = { [key: string]: string | number | boolean; };
+type BodyParams = { [key: string]: any; };
 
 const baseUrl = 'http://localhost:5093/';
 
-export function GET(url: string, jwt: string | null) {
+export async function GET(url: string, jwt: string | null) {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -12,13 +12,17 @@ export function GET(url: string, jwt: string | null) {
         },
     };
 
-    return fetch(baseUrl + url, requestOptions)
-        .then(res => res.json())
-        .then(data => data)
-        .catch(error => error);
+    try {
+        const res = await fetch(baseUrl + url, requestOptions);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        alert(error);
+        return error;
+    }
 }
 
-export function POST(body: BodyParams, jwt?: string | null) {
+export function POST(url: string, body: BodyParams, jwt: string | null) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -29,7 +33,7 @@ export function POST(body: BodyParams, jwt?: string | null) {
     };
 }
 
-export function DELETE(body: string, jwt?: string | null) {
+export function DELETE(body: string, jwt: string | null) {
     const requestOptions = {
         method: 'DELETE',
         headers: {

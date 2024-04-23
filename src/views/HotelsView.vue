@@ -6,6 +6,7 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { capitalizeFirstLetter } from '@/helpers/wordUtils';
+import { GET } from '@/helpers/api';
 
 // type ReadonlyHeaders = VDataTable['$props']['headers'];
 const headers: ReadonlyHeaders = [
@@ -16,9 +17,7 @@ const headers: ReadonlyHeaders = [
 ];
 
 const router = useRouter();
-
-const userStore = useUserStore();
-const { isAdmin, jwt } = storeToRefs(userStore);
+const { jwt } = useUserStore();
 
 const isLoading = ref<boolean>(true);
 const hotels: Hotel[] = reactive([]);
@@ -31,6 +30,9 @@ const requestOptions = {
         'Authorization': `Bearer ${jwt}`
     },
 };
+
+// const res = await GET("hotels", jwt);
+// console.log("RESSS", res);
 
 fetch(baseUrl + "hotels", requestOptions)
     .then(res => res.json())

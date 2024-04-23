@@ -44,6 +44,16 @@ fetch(baseUrl + "rooms/" + idRoom, requestOptions)
     });
 
 function bookRoom(from: Date, until: Date, idRoom: number, nGuests: number, name: string, dni: string) {
+
+    const body = {
+        from: from,
+        until: until,
+        number: nGuests,
+        guests: [{ name: name, dni: dni }]
+    };
+
+    const res = POST("rooms/" + idRoom, body, jwt);
+
     const requestOptions = {
         method: 'POST',
         headers: {
