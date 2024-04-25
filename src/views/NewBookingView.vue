@@ -16,8 +16,6 @@ const idRoom = +route.params.idRoom;
 const { jwt } = useUserStore();
 const router = useRouter();
 
-console.log("datetime in a format", new Date().toISOString());
-
 const requestOptions = {
     method: 'GET',
     headers: {
@@ -45,9 +43,6 @@ function bookRoom() {
         hotelName: "noHotelName",
         guests: [{ name: name.value, dni: dni.value }]
     };
-
-    console.log("body", body);
-    console.log("guests", body.guests);
 
     if (!body.from || !body.until || guests.value < 1 || guests.value > 4 || name.value == '' || dni.value == '') {
         alert("missing data");
@@ -98,6 +93,7 @@ onMounted(() => {
 
 <template>
     <LoadingIcon :isLoading="isLoading"></LoadingIcon>
+
     <div class="title">
         <h1>New Booking</h1>
         <v-row justify="space-between">
@@ -110,15 +106,13 @@ onMounted(() => {
 
         <v-col cols="auto">
             <p>Number of guests:</p>
-            <CounterMixMax :counter="counter" :min=1 :max=4 @update-counter="updateCounter">
-            </CounterMixMax>
+            <CounterMixMax :counter="counter" :min=1 :max=4 @update-counter="updateCounter" />
         </v-col>
 
         <v-sheet class="mx-auto" width="300">
             <v-form @submit.prevent>
                 <v-text-field v-model="name" label="Guest name"></v-text-field>
                 <v-text-field v-model="dni" label="DNI"></v-text-field>
-                <!-- <v-btn class="mt-2" color="info" type="submit" block>Submit</v-btn> -->
             </v-form>
         </v-sheet>
     </div>
