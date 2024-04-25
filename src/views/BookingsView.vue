@@ -17,7 +17,6 @@ const headers: ReadonlyHeaders = [
 const router = useRouter();
 const userStore = useUserStore();
 const { jwt } = storeToRefs(userStore);
-
 const isLoading = ref<boolean>(true);
 const bookings: Booking[] = reactive([]);
 
@@ -38,8 +37,6 @@ fetch(baseUrl + "bookings", requestOptions)
     });
 
 function deleteBooking(idBooking: number) {
-    console.log("id booking", idBooking);
-
     isLoading.value = true;
     const baseUrl = "http://localhost:5093/";
     const requestOptions = {
@@ -55,14 +52,9 @@ function deleteBooking(idBooking: number) {
             if (!res.ok) {
                 isLoading.value = false;
                 alert(`Error eliminando el booking ${res.status} ${res.statusText}`);
-                throw new Error(`Error realizando la reserva, status: ${res.status} ${res.statusText}`);
             }
+            isLoading.value = false;
             router.push({ path: `/bookings` });
-            isLoading.value = false;
-        })
-        .catch(err => {
-            isLoading.value = false;
-            alert(err);
         });
 }
 </script>

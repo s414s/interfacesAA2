@@ -7,8 +7,8 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { capitalizeFirstLetter } from '@/helpers/wordUtils';
 import { GET } from '@/helpers/api';
+import LoadingIcon from '@/components/LoadingIcon.vue';
 
-// type ReadonlyHeaders = VDataTable['$props']['headers'];
 const headers: ReadonlyHeaders = [
     { title: 'Hotel Name', align: 'center', key: 'name' },
     { title: 'Address', align: 'center', key: 'address' },
@@ -16,9 +16,8 @@ const headers: ReadonlyHeaders = [
     { title: 'N of rooms', align: 'center', key: 'numberOfRooms' },
 ];
 
-const router = useRouter();
 const { jwt } = useUserStore();
-
+const router = useRouter();
 const isLoading = ref<boolean>(true);
 const hotels: Hotel[] = reactive([]);
 
@@ -47,15 +46,7 @@ fetch(baseUrl + "hotels", requestOptions)
     <div class="title">
         <h1>Hotels</h1>
     </div>
-
-    <div v-if="isLoading">
-        <v-container>
-            <v-row justify="center">
-                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
-            </v-row>
-        </v-container>
-    </div>
-
+    <LoadingIcon :isLoading="isLoading"></LoadingIcon>
     <v-container v-if="!isLoading">
         <v-data-table :headers="headers" :items="hotels" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
             <template v-slot:item="{ item }">

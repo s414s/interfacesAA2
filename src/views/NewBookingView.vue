@@ -5,6 +5,9 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import CounterMixMax from '@/components/CounterMixMax.vue';
+import RoomStats from '@/components/RoomStats.vue';
+import LoadingIcon from '@/components/LoadingIcon.vue';
 
 import { GET, POST } from '@/helpers/api';
 
@@ -52,6 +55,7 @@ function bookRoom() {
     }
 
     // const res = POST("rooms/" + idRoom, body, jwt);
+
     const reqOptions = {
         method: 'POST',
         headers: {
@@ -65,7 +69,7 @@ function bookRoom() {
     fetch(baseUrl + "bookings/" + idRoom, reqOptions)
         .then(res => {
             if (!res.ok) {
-                alert(`Error realizando la reserva`);
+                alert(`Error realizando la reserva status: ${res.status} ${res.statusText}`);
                 throw new Error(`Error realizando la reserva, status: ${res.status} ${res.statusText}`);
             }
             router.push({ path: `/bookings` });
@@ -73,15 +77,17 @@ function bookRoom() {
         .catch(err => alert(err));
 };
 
-const increaseGuests = () => { guests.value = guests.value === 4 ? 4 : guests.value + 1; };
-const decreaseGuests = () => { guests.value = guests.value === 1 ? 1 : guests.value - 1; };
-
 const isLoading = ref<boolean>(true);
 const room = ref<Room | null>(null);
 const guests = ref(1);
 const name = ref("");
 const dni = ref("");
 const date = ref<[Date, Date] | null>();
+
+const counter = ref(1);
+const updateCounter = (value: number) => {
+    counter.value = value;
+};
 
 onMounted(() => {
     const startDate = new Date();
@@ -91,15 +97,7 @@ onMounted(() => {
 </script>
 
 <template>
-
-    <div v-if="isLoading">
-        <v-container>
-            <v-row justify="center">
-                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
-            </v-row>
-        </v-container>
-    </div>
-
+    <LoadingIcon :isLoading="isLoading"></LoadingIcon>
     <div class="title">
         <h1>New Booking</h1>
         <v-row justify="space-between">
@@ -112,11 +110,8 @@ onMounted(() => {
 
         <v-col cols="auto">
             <p>Number of guests:</p>
-            <v-row justify="center" class="info">
-                <v-btn color="primary" @click="decreaseGuests">-</v-btn>
-                <p>{{ guests }}</p>
-                <v-btn color="primary" @click="increaseGuests">+</v-btn>
-            </v-row>
+            <CounterMixMax :counter="counter" :min=1 :max=4 @update-counter="updateCounter">
+            </CounterMixMax>
         </v-col>
 
         <v-sheet class="mx-auto" width="300">
@@ -127,22 +122,15 @@ onMounted(() => {
             </v-form>
         </v-sheet>
     </div>
+
     <v-container v-if="!isLoading">
         <v-row justify="center">
-            <div>
-                <v-row justify="space-between" class="info">
-                    <p>Room Info:</p>
-                    <p>Capacity: {{ room?.capacity }}</p>
-                    <p>Storey: {{ room?.storey }}</p>
-                    <p>Type: {{ room?.type }}</p>
-                </v-row>
-            </div>
+            <RoomStats :capacity="room?.capacity" :storey="room?.storey" :type="room?.type"></RoomStats>
         </v-row>
         <v-row justify="center">
             <v-btn :disabled="name == '' || dni == ''" color="secondary" @click="bookRoom">Book</v-btn>
         </v-row>
     </v-container>
-
 </template>
 
 <style>

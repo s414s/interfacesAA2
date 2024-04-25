@@ -4,6 +4,7 @@ import type { VDataTable } from 'vuetify/components';
 import type { Room, ReadonlyHeaders } from '@/types/TypesDTO';
 import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import LoadingIcon from '@/components/LoadingIcon.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -40,15 +41,7 @@ fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
     <div class="title">
         <h1>Rooms</h1>
     </div>
-
-    <div v-if="isLoading">
-        <v-container>
-            <v-row justify="center">
-                <v-progress-circular color="primary" indeterminate :size="43"></v-progress-circular>
-            </v-row>
-        </v-container>
-    </div>
-
+    <LoadingIcon :isLoading="isLoading"></LoadingIcon>
     <v-container v-if="!isLoading">
         <v-data-table :headers="headers" :items="rooms" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
             <template v-slot:item="{ item }">
