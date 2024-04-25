@@ -38,6 +38,8 @@ fetch(baseUrl + "bookings", requestOptions)
     });
 
 function deleteBooking(idBooking: number) {
+    console.log("id booking", idBooking);
+
     isLoading.value = true;
     const baseUrl = "http://localhost:5093/";
     const requestOptions = {
@@ -48,10 +50,19 @@ function deleteBooking(idBooking: number) {
         },
     };
 
-    fetch(baseUrl + "bookings" + idBooking, requestOptions)
-        .then(res => res.json())
-        .then(data => {
+    fetch(baseUrl + "bookings/" + idBooking, requestOptions)
+        .then(res => {
+            if (!res.ok) {
+                isLoading.value = false;
+                alert(`Error eliminando el booking ${res.status} ${res.statusText}`);
+                throw new Error(`Error realizando la reserva, status: ${res.status} ${res.statusText}`);
+            }
+            router.push({ path: `/bookings` });
             isLoading.value = false;
+        })
+        .catch(err => {
+            isLoading.value = false;
+            alert(err);
         });
 }
 </script>
@@ -75,7 +86,7 @@ function deleteBooking(idBooking: number) {
                     <td align="center">{{ new Date(item.from).toLocaleDateString() }}</td>
                     <td align="center">{{ new Date(item.until).toLocaleDateString() }}</td>
                     <td align="center">
-                        <v-btn @click="deleteBooking">X</v-btn>
+                        <v-btn @click="deleteBooking(item.id)">X</v-btn>
                     </td>
                 </tr>
             </template>
