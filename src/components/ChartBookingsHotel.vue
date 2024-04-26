@@ -1,27 +1,17 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import type { Booking } from '@/types/TypesDTO';
-import { capitalizeFirstLetter } from '@/helpers/wordUtils';
+import { useUserStore } from '@/stores/userStore';
+import { onBeforeMount } from 'vue';
 
-// const bookings: Booking[] = reactive([]);
-const props = defineProps<{ bookings: Booking[]; }>();
+const { jwt } = useUserStore();
 
-// Categories
-const hotelNames = Array.from(props.bookings.map(x => x.hotelName));
-console.log("hotelNames", hotelNames);
-
-// Series
-const bookingsPerHotel = hotelNames.map(x => props.bookings.filter(y => y.hotelName === x).length);
-console.log("bookingsPerHotel", bookingsPerHotel);
-
-const options = {
+const options = ref({
     chart: {
         id: 'vuechart-bookings-per-hootel',
     },
     xaxis: {
-        // categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-        // categories: ["Boston", "Altamira"]
-        categories: hotelNames.map(x => capitalizeFirstLetter(x))
+        categories: ["Boston", "Altamira"]
     },
     plotOptions: {
         bar: {
@@ -33,14 +23,35 @@ const options = {
     dataLabels: {
         enabled: true
     }
+});
+
+const series = ref([{ data: [70, 91] }]);
+
+const baseUrl = "http://localhost:5093/";
+const requestOptions = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    },
 };
 
-const series = [{
-    name: 'series-1',
-    data: bookingsPerHotel,
-    // data: [70, 91]
-    // data: [30, 40, 45, 50, 49, 60, 70, 91]
-}];
+onBeforeMount(() => {
+    fetch(baseUrl + "bookings", requestOptions)
+        .then(res => res.json() as Promise<Booking[]>)
+        .then(data => {
+            console.log("data", data);
+
+            const hotelNames = Array.from(new Set(data.map(x => x.hotelName)));
+            // console.log("hotel names on before mount", hotelNames);
+
+            const bookingsPerHotel = hotelNames.map(x => data.filter(y => y.hotelName === x).length);
+            // console.log("bookings per hotel on before mount", bookingsPerHotel);
+
+            series.value[0].data = bookingsPerHotel;
+            options.value.xaxis.categories = hotelNames;
+        });
+});
 </script>
 
 <template>
