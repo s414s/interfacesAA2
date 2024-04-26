@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import type { Booking } from '@/types/TypesDTO';
 import { useUserStore } from '@/stores/userStore';
 import { onBeforeMount } from 'vue';
+import { capitalizeFirstLetter } from '@/helpers/wordUtils';
 
 const { jwt } = useUserStore();
 
@@ -27,29 +28,25 @@ const options = ref({
 
 const series = ref([{ data: [70, 91] }]);
 
-const baseUrl = "http://localhost:5093/";
-const requestOptions = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-    },
-};
-
 onBeforeMount(() => {
+    const baseUrl = "http://localhost:5093/";
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+        },
+    };
+
     fetch(baseUrl + "bookings", requestOptions)
         .then(res => res.json() as Promise<Booking[]>)
         .then(data => {
             console.log("data", data);
-
             const hotelNames = Array.from(new Set(data.map(x => x.hotelName)));
-            // console.log("hotel names on before mount", hotelNames);
-
             const bookingsPerHotel = hotelNames.map(x => data.filter(y => y.hotelName === x).length);
-            // console.log("bookings per hotel on before mount", bookingsPerHotel);
 
             series.value[0].data = bookingsPerHotel;
-            options.value.xaxis.categories = hotelNames;
+            options.value = { ...options.value, xaxis: { ...options.value.xaxis, categories: hotelNames.map(x => capitalizeFirstLetter(x)) } };
         });
 });
 </script>
