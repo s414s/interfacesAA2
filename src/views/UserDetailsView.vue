@@ -12,7 +12,6 @@ if (user.id === 0) {
 } else {
     isLoading.value = false;
 }
-
 </script>
 
 <template>

@@ -3,7 +3,6 @@ import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
 import type { Booking, ReadonlyHeaders } from '@/types/TypesDTO';
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { capitalizeFirstLetter } from '@/helpers/wordUtils';
 
@@ -14,7 +13,6 @@ const headers: ReadonlyHeaders = [
     { title: 'Delete', align: 'center', key: '' },
 ];
 
-const router = useRouter();
 const userStore = useUserStore();
 const { jwt } = storeToRefs(userStore);
 const isLoading = ref<boolean>(true);
@@ -53,8 +51,13 @@ function deleteBooking(idBooking: number) {
                 isLoading.value = false;
                 alert(`Error eliminando el booking ${res.status} ${res.statusText}`);
             }
+
+            const index = bookings.findIndex(x => x.id === idBooking);
+            if (index !== -1) {
+                bookings.splice(index, 1);
+            }
+
             isLoading.value = false;
-            router.push({ path: `/bookings` });
         });
 }
 </script>
@@ -77,9 +80,7 @@ function deleteBooking(idBooking: number) {
                     <td align="center"> {{ capitalizeFirstLetter(item.hotelName) }}</td>
                     <td align="center">{{ new Date(item.from).toLocaleDateString() }}</td>
                     <td align="center">{{ new Date(item.until).toLocaleDateString() }}</td>
-                    <td align="center">
-                        <v-btn @click="deleteBooking(item.id)">X</v-btn>
-                    </td>
+                    <td align="center"><v-btn @click="deleteBooking(item.id)">X</v-btn></td>
                 </tr>
             </template>
         </v-data-table>
