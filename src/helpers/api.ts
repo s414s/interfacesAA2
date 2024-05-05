@@ -1,9 +1,8 @@
 import { useUserStore } from "@/stores/userStore";
-
 type QueryParams = { [key: string]: string | number | boolean; };
 type BodyParams = { [key: string]: any; };
-const baseUrl = 'http://localhost:5093/';
 
+const baseUrl = 'http://localhost:5093/';
 
 export async function GET(url: string) {
     const { jwt } = useUserStore();
@@ -14,7 +13,6 @@ export async function GET(url: string) {
             'Authorization': `Bearer ${jwt}`
         },
     };
-
     const res = await fetch(baseUrl + url, requestOptions);
     if (!res.ok) {
         throw new Error(`Failed to fetch ${url}: ${res.statusText}`);
@@ -22,7 +20,6 @@ export async function GET(url: string) {
     return await res.json();
 }
 
-// export async function POST(url: string, body: BodyParams, jwt: string | null) {
 export async function POST(url: string, body: BodyParams) {
     const { jwt } = useUserStore();
     const requestOptions = {
@@ -40,7 +37,6 @@ export async function POST(url: string, body: BodyParams) {
     return await res.json();
 }
 
-// export async function DELETE(url: string, body: string, jwt: string | null) {
 export async function DELETE(url: string, body?: string) {
     const { jwt } = useUserStore();
     const requestOptions = {
