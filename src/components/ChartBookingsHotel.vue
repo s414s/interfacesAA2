@@ -49,6 +49,7 @@ onBeforeMount(() => {
             options.value = { ...options.value, xaxis: { ...options.value.xaxis, categories: hotelNames.map(x => capitalizeFirstLetter(x)) } };
         });
 });
+
 </script>
 
 <template>

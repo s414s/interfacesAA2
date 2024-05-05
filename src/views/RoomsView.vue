@@ -1,32 +1,27 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/userStore';
 import type { Room } from '@/types/TypesDTO';
 import { reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import LoadingIcon from '@/components/LoadingIcon.vue';
 import RoomsTable from '@/components/RoomsTable.vue';
+import { GET } from '@/helpers/api';
 
 const route = useRoute();
-const { jwt } = useUserStore();
 const idHotel = +route.params.idHotel;
 const isLoading = ref(true);
 const rooms: Room[] = reactive([]);
 
-const requestOptions = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-    },
+const fetchData = async () => {
+    try {
+        const res = await GET(`hotels/${idHotel}/rooms`);
+        rooms.push(...res.rooms);
+        isLoading.value = false;
+    } catch (error) {
+        alert(error);
+    }
 };
 
-const baseUrl = "http://localhost:5093/";
-fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
-    .then(res => res.json())
-    .then(data => {
-        rooms.push(...data.rooms);
-        isLoading.value = false;
-    });
+fetchData();
 </script>
 
 <template>

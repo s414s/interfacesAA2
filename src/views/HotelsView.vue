@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
 import type { Hotel, ReadonlyHeaders } from '@/types/TypesDTO';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
 import { capitalizeFirstLetter } from '@/helpers/wordUtils';
+import { storeToRefs } from 'pinia';
 import { GET } from '@/helpers/api';
 import LoadingIcon from '@/components/LoadingIcon.vue';
 
@@ -16,30 +15,21 @@ const headers: ReadonlyHeaders = [
     { title: 'N of rooms', align: 'center', key: 'numberOfRooms' },
 ];
 
-const { jwt } = useUserStore();
 const router = useRouter();
 const isLoading = ref<boolean>(true);
 const hotels: Hotel[] = reactive([]);
 
-const baseUrl = "http://localhost:5093/";
-const requestOptions = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-    },
+const fetchData = async () => {
+    try {
+        const res = await GET("hotels");
+        hotels.push(...res);
+        isLoading.value = false;
+    } catch (error) {
+        alert(error);
+    }
 };
 
-// const res = await GET("hotels", jwt);
-// console.log("RESSS", res);
-
-fetch(baseUrl + "hotels", requestOptions)
-    .then(res => res.json())
-    .then(data => {
-        hotels.push(...data);
-        isLoading.value = false;
-    });
-
+fetchData();
 </script>
 
 <template>

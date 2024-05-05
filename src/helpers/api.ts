@@ -1,9 +1,12 @@
+import { useUserStore } from "@/stores/userStore";
+
 type QueryParams = { [key: string]: string | number | boolean; };
 type BodyParams = { [key: string]: any; };
-
 const baseUrl = 'http://localhost:5093/';
 
-export async function GET(url: string, jwt: string | null) {
+
+export async function GET(url: string) {
+    const { jwt } = useUserStore();
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -12,17 +15,16 @@ export async function GET(url: string, jwt: string | null) {
         },
     };
 
-    try {
-        const res = await fetch(baseUrl + url, requestOptions);
-        const data = await res.json();
-        return data;
-    } catch (error) {
-        alert(error);
-        return error;
+    const res = await fetch(baseUrl + url, requestOptions);
+    if (!res.ok) {
+        throw new Error(`Failed to fetch ${url}: ${res.statusText}`);
     }
+    return await res.json();
 }
 
-export function POST(url: string, body: BodyParams, jwt: string | null) {
+// export async function POST(url: string, body: BodyParams, jwt: string | null) {
+export async function POST(url: string, body: BodyParams) {
+    const { jwt } = useUserStore();
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -31,9 +33,16 @@ export function POST(url: string, body: BodyParams, jwt: string | null) {
         },
         body: JSON.stringify(body)
     };
+    const res = await fetch(baseUrl + url, requestOptions);
+    if (!res.ok) {
+        throw new Error(`Failed to fetch ${url}: ${res.statusText}`);
+    }
+    return await res.json();
 }
 
-export function DELETE(body: string, jwt: string | null) {
+// export async function DELETE(url: string, body: string, jwt: string | null) {
+export async function DELETE(url: string, body?: string) {
+    const { jwt } = useUserStore();
     const requestOptions = {
         method: 'DELETE',
         headers: {
@@ -41,4 +50,9 @@ export function DELETE(body: string, jwt: string | null) {
             'Authorization': `Bearer ${jwt}`
         },
     };
+    const res = await fetch(baseUrl + url, requestOptions);
+    if (!res.ok) {
+        throw new Error(`Failed to fetch ${url}: ${res.statusText}`);
+    }
+    return await res.json();
 }

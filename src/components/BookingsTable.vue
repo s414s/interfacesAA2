@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/userStore';
 import type { VDataTable } from 'vuetify/components';
 import type { Booking, ReadonlyHeaders } from '@/types/TypesDTO';
 import { reactive, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { capitalizeFirstLetter } from '@/helpers/wordUtils';
 import LoadingIcon from '@/components/LoadingIcon.vue';
+import { DELETE, GET } from '@/helpers/api';
 
 const headers: ReadonlyHeaders = [
     { title: 'Hotel Name', align: 'center', key: 'hotelName' },
@@ -14,52 +14,35 @@ const headers: ReadonlyHeaders = [
     { title: 'Delete', align: 'center', key: '' },
 ];
 
-const userStore = useUserStore();
-const { jwt } = storeToRefs(userStore);
 const isLoading = ref<boolean>(true);
 const bookings: Booking[] = reactive([]);
 
-const baseUrl = "http://localhost:5093/";
-const requestOptions = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-    },
-};
-fetch(baseUrl + "bookings", requestOptions)
-    .then(res => res.json())
-    .then(data => {
-        bookings.push(...data);
-        isLoading.value = false;
-    });
-
-function deleteBooking(idBooking: number) {
+const deleteBooking = async (idBooking: number) => {
     isLoading.value = true;
-    const baseUrl = "http://localhost:5093/";
-    const requestOptions = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt}`
-        },
-    };
+    try {
+        await DELETE("bookings/" + idBooking);
+        const index = bookings.findIndex(x => x.id === idBooking);
+        if (index !== -1) {
+            bookings.splice(index, 1);
+        }
+        isLoading.value = false;
+    } catch (error) {
+        alert(error);
+        isLoading.value = false;
+    }
+};
 
-    fetch(baseUrl + "bookings/" + idBooking, requestOptions)
-        .then(res => {
-            if (!res.ok) {
-                isLoading.value = false;
-                alert(`Error eliminando el booking ${res.status} ${res.statusText}`);
-            }
+const fetchData = async () => {
+    try {
+        const res = await GET("bookings");
+        bookings.push(...res);
+        isLoading.value = false;
+    } catch (error) {
+        alert(error);
+    }
+};
 
-            const index = bookings.findIndex(x => x.id === idBooking);
-            if (index !== -1) {
-                bookings.splice(index, 1);
-            }
-
-            isLoading.value = false;
-        });
-}
+fetchData();
 </script>
 
 <template>
