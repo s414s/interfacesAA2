@@ -26,7 +26,6 @@ const requestOptions = {
         'Authorization': `Bearer ${jwt}`
     },
 };
-
 fetch(baseUrl + "bookings", requestOptions)
     .then(res => res.json())
     .then(data => {
