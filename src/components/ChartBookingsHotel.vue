@@ -52,6 +52,5 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <!-- https://medium.com/@vickiec630/easy-way-to-integrate-apexcharts-into-vue-ccb17f06e31e -->
     <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
 </template>

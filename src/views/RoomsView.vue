@@ -1,22 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
-import type { VDataTable } from 'vuetify/components';
-import type { Room, ReadonlyHeaders } from '@/types/TypesDTO';
+import type { Room } from '@/types/TypesDTO';
 import { reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import LoadingIcon from '@/components/LoadingIcon.vue';
+import RoomsTable from '@/components/RoomsTable.vue';
 
 const route = useRoute();
-const router = useRouter();
 const { jwt } = useUserStore();
 const idHotel = +route.params.idHotel;
-
-const headers: ReadonlyHeaders = [
-    { title: 'Storey', align: 'center', key: 'storey' },
-    { title: 'Type', align: 'center', key: 'type' },
-    { title: 'Capacity', align: 'center', key: 'capacity' },
-];
-
 const isLoading = ref(true);
 const rooms: Room[] = reactive([]);
 
@@ -43,15 +35,7 @@ fetch(`${baseUrl}hotels/${idHotel}/rooms`, requestOptions)
     </div>
     <LoadingIcon :isLoading="isLoading"></LoadingIcon>
     <v-container v-if="!isLoading">
-        <v-data-table :headers="headers" :items="rooms" density="compact" :sort-by="[{ key: 'id', order: 'asc' }]">
-            <template v-slot:item="{ item }">
-                <tr @click="router.push({ path: `/newbooking/${item.id}` })" style="cursor: pointer">
-                    <td align="center"> {{ item.storey }}</td>
-                    <td align="center">{{ item.type }}</td>
-                    <td align="center">{{ item.capacity }}</td>
-                </tr>
-            </template>
-        </v-data-table>
+        <RoomsTable :rooms="rooms"></RoomsTable>
     </v-container>
 </template>
 
